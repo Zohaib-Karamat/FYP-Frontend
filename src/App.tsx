@@ -9,6 +9,9 @@ import Assessments from "./pages/Assessments";
 import Resources from "./pages/Resources";
 import MoodTracker from "./pages/MoodTracker";
 import Support from "./pages/Support";
+import SignIn from "./pages/SignIn";
+import SignUp from "./pages/SignUp";
+import ForgotPassword from "./pages/ForgotPassword";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -21,6 +24,9 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
+          <Route path="/sign-in" element={<SignIn />} />
+          <Route path="/sign-up" element={<SignUp />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/assessments" element={<Assessments />} />
           <Route path="/resources" element={<Resources />} />

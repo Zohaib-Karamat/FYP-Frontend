@@ -26,27 +26,36 @@ const MoodChart = () => {
         </div>
       </div>
 
-      <div className="flex items-end justify-between gap-3 h-48">
-        {moodData.map((data, index) => {
-          const height = (data.mood / maxMood) * 100;
-          const isHighest = data.mood === Math.max(...moodData.map(d => d.mood));
-          
-          return (
-            <div key={index} className="flex-1 flex flex-col items-center gap-2">
-              <div className="w-full bg-secondary rounded-lg overflow-hidden h-full flex items-end">
-                <div
-                  className={`w-full rounded-t-lg transition-all duration-500 ${
-                    isHighest
-                      ? "bg-gradient-to-t from-success to-success/80"
-                      : "bg-gradient-to-t from-primary to-primary/80"
-                  }`}
-                  style={{ height: `${height}%`, animationDelay: `${index * 0.1}s` }}
-                />
+      <div className="space-y-3">
+        <div className="flex items-end justify-between gap-3 h-48">
+          {moodData.map((data, index) => {
+            const height = (data.mood / maxMood) * 100;
+            const isHighest = data.mood === Math.max(...moodData.map(d => d.mood));
+            
+            return (
+              <div key={index} className="flex-1 flex flex-col items-center h-full">
+                <div className="w-full bg-secondary/30 rounded-lg overflow-hidden h-full flex items-end relative">
+                  <div
+                    className={`w-full rounded-lg transition-all duration-500 hover:opacity-80 cursor-pointer ${
+                      isHighest
+                        ? "bg-gradient-to-t from-success to-success/80"
+                        : "bg-gradient-to-t from-primary to-primary/80"
+                    }`}
+                    style={{ height: `${height}%`, animationDelay: `${index * 0.1}s` }}
+                    title={`${data.day}: ${data.mood}/10`}
+                  />
+                </div>
               </div>
+            );
+          })}
+        </div>
+        <div className="flex items-center justify-between gap-3">
+          {moodData.map((data, index) => (
+            <div key={index} className="flex-1 text-center">
               <span className="text-xs font-medium text-muted-foreground">{data.day}</span>
             </div>
-          );
-        })}
+          ))}
+        </div>
       </div>
 
       <div className="mt-6 pt-6 border-t border-border">

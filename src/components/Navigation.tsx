@@ -1,5 +1,5 @@
 import { Button } from "@/components/ui/button";
-import { Heart, Menu } from "lucide-react";
+import { Brain, Menu } from "lucide-react";
 import { Link } from "react-router-dom";
 import {
   Sheet,
@@ -18,11 +18,11 @@ const Navigation = () => {
   ];
 
   return (
-    <nav className="fixed top-0 left-0 right-0 z-50 bg-background/95 backdrop-blur-lg border-b border-border shadow-sm">
+    <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border/50 shadow-sm">
       <div className="container mx-auto px-4 h-16 flex items-center justify-between">
         <Link to="/" className="flex items-center gap-2 group">
           <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-primary via-accent to-accent-secondary flex items-center justify-center group-hover:scale-110 transition-transform">
-            <Heart className="h-5 w-5 text-white" fill="currentColor" />
+            <Brain className="h-6 w-6 text-white" />
           </div>
           <span className="text-xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
             Maternal Mind
@@ -44,12 +44,16 @@ const Navigation = () => {
         </div>
         
         <div className="flex items-center gap-3">
-          <Button variant="ghost" size="sm" className="hidden sm:flex">
-            Sign In
-          </Button>
-          <Button size="sm" className="bg-gradient-to-r from-primary to-primary-dark hover:opacity-90">
-            Get Started
-          </Button>
+          <Link to="/sign-in">
+            <Button variant="ghost" size="sm" className="hidden sm:flex">
+              Sign In
+            </Button>
+          </Link>
+          <Link to="/sign-up">
+            <Button size="sm" className="bg-gradient-to-r from-primary to-primary-dark hover:opacity-90">
+              Get Started
+            </Button>
+          </Link>
           
           {/* Mobile Menu */}
           <Sheet>
