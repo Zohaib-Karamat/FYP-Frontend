@@ -8,58 +8,68 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    /* Pure white background for clean, premium feel */
-    --background: 0 0% 100%;
-    --foreground: 221 39% 11%;
+    /* Creamy warm background for softer feel */
+    --background: 30 20% 98%;
+    --foreground: 240 8% 12%;
 
-    /* Card styling with subtle grey */
+    /* Pure white cards for elevation */
     --card: 0 0% 100%;
-    --card-foreground: 221 39% 11%;
+    --card-foreground: 240 8% 12%;
 
     /* Popover styling */
     --popover: 0 0% 100%;
-    --popover-foreground: 221 39% 11%;
+    --popover-foreground: 240 8% 12%;
 
-    /* Sapphire Blue - Primary action color */
-    --primary: 221 83% 53%;
+    /* Deep Teal - Primary (trust, medical, calm) */
+    --primary: 186 62% 42%;
     --primary-foreground: 0 0% 100%;
     
-    /* Deep Navy - Professional headers/navbars */
-    --primary-dark: 221 68% 32%;
+    /* Darker Teal for depth */
+    --primary-dark: 186 72% 28%;
     
-    /* Light Grey - Card backgrounds */
-    --secondary: 220 14% 96%;
-    --secondary-foreground: 221 39% 11%;
+    /* Sage Green - Secondary (wellness, growth) */
+    --secondary: 142 22% 88%;
+    --secondary-foreground: 142 42% 24%;
 
-    /* Cool Grey - Secondary text */
-    --muted: 220 14% 96%;
-    --muted-foreground: 220 9% 46%;
+    /* Warm grey - muted elements */
+    --muted: 30 12% 92%;
+    --muted-foreground: 240 4% 46%;
 
-    /* Rose Quartz Pink - Maternal care accent */
-    --accent: 330 81% 71%;
+    /* Warm Coral - Maternal warmth */
+    --accent: 14 88% 68%;
     --accent-foreground: 0 0% 100%;
     
-    /* Soft Lavender - Emotional healing accent */
-    --accent-secondary: 271 91% 75%;
+    /* Deep Plum - Emotional depth */
+    --accent-secondary: 280 42% 52%;
 
-    /* Coral Red - High risk/destructive */
-    --destructive: 0 84% 60%;
+    /* Soft Red - High risk */
+    --destructive: 0 72% 58%;
     --destructive-foreground: 0 0% 100%;
     
-    /* Amber Orange - Moderate risk */
-    --warning: 38 92% 50%;
-    --warning-foreground: 0 0% 100%;
+    /* Warm Amber - Moderate attention */
+    --warning: 32 98% 58%;
+    --warning-foreground: 240 8% 12%;
     
-    /* Calm Green - Low risk/success */
-    --success: 142 71% 45%;
+    /* Sage Green Dark - Success/low risk */
+    --success: 142 42% 42%;
     --success-foreground: 0 0% 100%;
 
     /* Borders and inputs */
-    --border: 220 13% 91%;
-    --input: 220 13% 91%;
-    --ring: 221 83% 53%;
+    --border: 30 12% 88%;
+    --input: 30 12% 88%;
+    --ring: 186 62% 42%;
 
-    --radius: 0.75rem;
+    --radius: 0.875rem;
+    
+    /* Custom gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(186 62% 42%), hsl(186 72% 28%));
+    --gradient-warm: linear-gradient(135deg, hsl(14 88% 68%), hsl(280 42% 52%));
+    --gradient-calm: linear-gradient(135deg, hsl(142 42% 42%), hsl(186 62% 42%));
+    
+    /* Shadows */
+    --shadow-soft: 0 2px 8px -2px hsl(240 8% 12% / 0.08);
+    --shadow-medium: 0 8px 24px -4px hsl(240 8% 12% / 0.12);
+    --shadow-strong: 0 16px 48px -8px hsl(240 8% 12% / 0.16);
 
     --sidebar-background: 0 0% 98%;
 
@@ -79,43 +89,47 @@ All colors MUST be HSL.
   }
 
   .dark {
-    --background: 221 39% 11%;
-    --foreground: 0 0% 98%;
+    --background: 240 8% 12%;
+    --foreground: 30 20% 98%;
 
-    --card: 221 39% 11%;
-    --card-foreground: 0 0% 98%;
+    --card: 240 6% 16%;
+    --card-foreground: 30 20% 98%;
 
-    --popover: 221 39% 11%;
-    --popover-foreground: 0 0% 98%;
+    --popover: 240 6% 16%;
+    --popover-foreground: 30 20% 98%;
 
-    --primary: 221 83% 53%;
+    --primary: 186 62% 52%;
     --primary-foreground: 0 0% 100%;
     
-    --primary-dark: 221 68% 32%;
+    --primary-dark: 186 72% 38%;
 
-    --secondary: 220 13% 18%;
-    --secondary-foreground: 0 0% 98%;
+    --secondary: 142 22% 22%;
+    --secondary-foreground: 142 22% 88%;
 
-    --muted: 220 13% 18%;
-    --muted-foreground: 220 9% 65%;
+    --muted: 240 4% 22%;
+    --muted-foreground: 240 4% 65%;
 
-    --accent: 330 81% 71%;
+    --accent: 14 88% 68%;
     --accent-foreground: 0 0% 100%;
     
-    --accent-secondary: 271 91% 75%;
+    --accent-secondary: 280 42% 62%;
 
-    --destructive: 0 84% 60%;
+    --destructive: 0 72% 58%;
     --destructive-foreground: 0 0% 100%;
     
-    --warning: 38 92% 50%;
-    --warning-foreground: 0 0% 100%;
+    --warning: 32 98% 58%;
+    --warning-foreground: 240 8% 12%;
     
-    --success: 142 71% 45%;
+    --success: 142 42% 52%;
     --success-foreground: 0 0% 100%;
 
-    --border: 220 13% 18%;
-    --input: 220 13% 18%;
-    --ring: 221 83% 53%;
+    --border: 240 4% 22%;
+    --input: 240 4% 22%;
+    --ring: 186 62% 52%;
+    
+    --shadow-soft: 0 2px 8px -2px hsl(0 0% 0% / 0.24);
+    --shadow-medium: 0 8px 24px -4px hsl(0 0% 0% / 0.32);
+    --shadow-strong: 0 16px 48px -8px hsl(0 0% 0% / 0.48);
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
     --sidebar-primary: 224.3 76.3% 48%;
