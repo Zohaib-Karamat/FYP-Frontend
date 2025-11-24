@@ -1,4 +1,5 @@
 import Navigation from "@/components/Navigation";
+import Footer from "@/components/Footer";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -195,6 +196,7 @@ const Resources = () => {
           </div>
         </div>
       </main>
+      <Footer />
     </div>
   );
 };

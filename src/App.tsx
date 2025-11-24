@@ -12,6 +12,8 @@ import Support from "./pages/Support";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
 import ForgotPassword from "./pages/ForgotPassword";
+import VoiceAssessment from "./pages/VoiceAssessment";
+import AssessmentDetails from "./pages/AssessmentDetails";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -32,6 +34,8 @@ const App = () => (
           <Route path="/resources" element={<Resources />} />
           <Route path="/mood-tracker" element={<MoodTracker />} />
           <Route path="/support" element={<Support />} />
+          <Route path="/voice-assessment" element={<VoiceAssessment />} />
+          <Route path="/assessment/:id" element={<AssessmentDetails />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

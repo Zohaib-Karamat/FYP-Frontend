@@ -1,4 +1,5 @@
 import Navigation from "@/components/Navigation";
+import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Textarea } from "@/components/ui/textarea";
@@ -159,6 +160,7 @@ const MoodTracker = () => {
           </div>
         </div>
       </main>
+      <Footer />
     </div>
   );
 };

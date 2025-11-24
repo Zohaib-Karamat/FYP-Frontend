@@ -2,6 +2,7 @@ import Navigation from "@/components/Navigation";
 import StatCard from "@/components/Dashboard/StatCard";
 import MoodChart from "@/components/Dashboard/MoodChart";
 import RecentAssessments from "@/components/Dashboard/RecentAssessments";
+import Footer from "@/components/Footer";
 import { Heart, Activity, Calendar, MessageCircle } from "lucide-react";
 
 const Dashboard = () => {
@@ -61,6 +62,7 @@ const Dashboard = () => {
           </div>
         </div>
       </main>
+      <Footer />
     </div>
   );
 };

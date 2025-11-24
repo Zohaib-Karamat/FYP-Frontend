@@ -1,4 +1,5 @@
 import Navigation from "@/components/Navigation";
+import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -85,6 +86,19 @@ const assessments = [
     riskLevel: null,
     gradient: "from-primary-dark to-primary",
   },
+  {
+    id: "voice-assessment",
+    title: "Voice-Based Assessment",
+    description: "Share your feelings through voice. AI-powered transcription using Whisper AI.",
+    duration: "Flexible",
+    questions: "Voice input",
+    frequency: "As needed",
+    lastTaken: null,
+    lastScore: null,
+    status: "new",
+    riskLevel: null,
+    gradient: "from-accent to-primary",
+  },
 ];
 
 const Assessments = () => {
@@ -138,97 +152,105 @@ const Assessments = () => {
             {assessments.map((assessment, index) => (
               <Card
                 key={assessment.id}
-                className="group hover:shadow-lg transition-all duration-300 overflow-hidden border-border animate-scale-in"
+                className="group hover:shadow-lg transition-all duration-300 overflow-hidden border-border animate-scale-in flex flex-col"
                 style={{ animationDelay: `${index * 0.05}s` }}
               >
                 {/* Gradient Header */}
                 <div className={`h-2 bg-gradient-to-r ${assessment.gradient}`} />
                 
-                <div className="p-6">
-                  {/* Header */}
-                  <div className="flex items-start justify-between mb-4">
-                    <div className={`h-14 w-14 rounded-xl bg-gradient-to-br ${assessment.gradient} flex items-center justify-center flex-shrink-0`}>
-                      <FileText className="h-7 w-7 text-white" />
-                    </div>
-                    <div className="flex flex-col items-end gap-2">
-                      {assessment.status === "completed" && (
-                        <Badge className="bg-success/10 text-success hover:bg-success/20">
-                          <CheckCircle2 className="h-3 w-3 mr-1" />
-                          Completed
-                        </Badge>
-                      )}
-                      {assessment.status === "due" && (
-                        <Badge className="bg-warning/10 text-warning hover:bg-warning/20">
-                          <Clock className="h-3 w-3 mr-1" />
-                          Due Soon
-                        </Badge>
-                      )}
-                      {assessment.status === "new" && (
-                        <Badge variant="secondary" className="bg-secondary">
-                          New
-                        </Badge>
-                      )}
-                      {assessment.riskLevel && (
-                        <Badge
-                          variant="outline"
-                          className={
-                            assessment.riskLevel === "low"
-                              ? "border-success text-success"
-                              : assessment.riskLevel === "moderate"
-                              ? "border-warning text-warning"
-                              : "border-destructive text-destructive"
-                          }
-                        >
-                          {assessment.riskLevel === "low" && "Low Risk"}
-                          {assessment.riskLevel === "moderate" && "Moderate"}
-                          {assessment.riskLevel === "high" && "High Risk"}
-                        </Badge>
-                      )}
-                    </div>
-                  </div>
-
-                  {/* Content */}
-                  <h3 className="text-xl font-semibold text-foreground mb-3 group-hover:text-primary transition-colors">
-                    {assessment.title}
-                  </h3>
-                  <p className="text-sm text-muted-foreground mb-6 leading-relaxed">
-                    {assessment.description}
-                  </p>
-
-                  {/* Stats */}
-                  <div className="grid grid-cols-2 gap-4 mb-6 pb-6 border-b border-border">
-                    <div>
-                      <p className="text-xs text-muted-foreground mb-1">Duration</p>
-                      <p className="text-sm font-medium text-foreground">{assessment.duration}</p>
-                    </div>
-                    <div>
-                      <p className="text-xs text-muted-foreground mb-1">Questions</p>
-                      <p className="text-sm font-medium text-foreground">{assessment.questions} items</p>
-                    </div>
-                    <div>
-                      <p className="text-xs text-muted-foreground mb-1">Frequency</p>
-                      <p className="text-sm font-medium text-foreground">{assessment.frequency}</p>
-                    </div>
-                    <div>
-                      <p className="text-xs text-muted-foreground mb-1">Last Taken</p>
-                      <p className="text-sm font-medium text-foreground">
-                        {assessment.lastTaken || "Never"}
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Last Score */}
-                  {assessment.lastScore !== null && (
-                    <div className="mb-6 p-4 rounded-lg bg-secondary/30">
-                      <div className="flex items-center justify-between">
-                        <span className="text-sm text-muted-foreground">Last Score</span>
-                        <span className="text-2xl font-bold text-foreground">{assessment.lastScore}</span>
+                <div className="p-6 flex flex-col flex-1 justify-between">
+                  <div>
+                    {/* Header */}
+                    <div className="flex items-start justify-between mb-4">
+                      <div className={`h-14 w-14 rounded-xl bg-gradient-to-br ${assessment.gradient} flex items-center justify-center flex-shrink-0`}>
+                        <FileText className="h-7 w-7 text-white" />
+                      </div>
+                      <div className="flex flex-col items-end gap-2">
+                        {assessment.status === "completed" && (
+                          <Badge className="bg-success/10 text-success hover:bg-success/20">
+                            <CheckCircle2 className="h-3 w-3 mr-1" />
+                            Completed
+                          </Badge>
+                        )}
+                        {assessment.status === "due" && (
+                          <Badge className="bg-warning/10 text-warning hover:bg-warning/20">
+                            <Clock className="h-3 w-3 mr-1" />
+                            Due Soon
+                          </Badge>
+                        )}
+                        {assessment.status === "new" && (
+                          <Badge variant="secondary" className="bg-secondary">
+                            New
+                          </Badge>
+                        )}
+                        {assessment.riskLevel && (
+                          <Badge
+                            variant="outline"
+                            className={
+                              assessment.riskLevel === "low"
+                                ? "border-success text-success"
+                                : assessment.riskLevel === "moderate"
+                                ? "border-warning text-warning"
+                                : "border-destructive text-destructive"
+                            }
+                          >
+                            {assessment.riskLevel === "low" && "Low Risk"}
+                            {assessment.riskLevel === "moderate" && "Moderate"}
+                            {assessment.riskLevel === "high" && "High Risk"}
+                          </Badge>
+                        )}
                       </div>
                     </div>
-                  )}
+
+                    {/* Content */}
+                    <h3 className="text-xl font-semibold text-foreground mb-3 group-hover:text-primary transition-colors">
+                      {assessment.title}
+                    </h3>
+                    <p className="text-sm text-muted-foreground mb-6 leading-relaxed">
+                      {assessment.description}
+                    </p>
+
+                    {/* Stats */}
+                    <div className="grid grid-cols-2 gap-4 mb-6 pb-6 border-b border-border">
+                      <div>
+                        <p className="text-xs text-muted-foreground mb-1">Duration</p>
+                        <p className="text-sm font-medium text-foreground">{assessment.duration}</p>
+                      </div>
+                      <div>
+                        <p className="text-xs text-muted-foreground mb-1">Questions</p>
+                        <p className="text-sm font-medium text-foreground">{assessment.questions} items</p>
+                      </div>
+                      <div>
+                        <p className="text-xs text-muted-foreground mb-1">Frequency</p>
+                        <p className="text-sm font-medium text-foreground">{assessment.frequency}</p>
+                      </div>
+                      <div>
+                        <p className="text-xs text-muted-foreground mb-1">Last Taken</p>
+                        <p className="text-sm font-medium text-foreground">
+                          {assessment.lastTaken || "Never"}
+                        </p>
+                      </div>
+                    </div>
+
+                    {/* Last Score */}
+                    {assessment.lastScore !== null ? (
+                      <div className="mb-6 p-4 rounded-lg bg-secondary/30">
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm text-muted-foreground">Last Score</span>
+                          <span className="text-2xl font-bold text-foreground">{assessment.lastScore}</span>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="mb-6 p-4 rounded-lg bg-muted/30 border border-dashed border-muted-foreground/20">
+                        <div className="flex items-center justify-center">
+                          <span className="text-sm text-muted-foreground">No previous score</span>
+                        </div>
+                      </div>
+                    )}
+                  </div>
 
                   {/* Action Button */}
-                  <Link to={`/assessment/${assessment.id}`}>
+                  <Link to={assessment.id === 'voice-assessment' ? '/voice-assessment' : `/assessment/${assessment.id}`}>
                     <Button className="w-full gap-2 bg-primary hover:bg-primary-dark">
                       {assessment.status === "new" ? "Start Assessment" : "Take Again"}
                       <ArrowRight className="h-4 w-4" />
@@ -240,6 +262,7 @@ const Assessments = () => {
           </div>
         </div>
       </main>
+      <Footer />
     </div>
   );
 };
