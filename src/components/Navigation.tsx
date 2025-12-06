@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
-import { Brain, Menu } from "lucide-react";
+import { Menu } from "lucide-react";
 import { Link } from "react-router-dom";
+import Logo from "@/components/Logo";
 import {
   Sheet,
   SheetContent,
@@ -20,13 +21,8 @@ const Navigation = () => {
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-background/80 backdrop-blur-md border-b border-border/50 shadow-sm">
       <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-        <Link to="/" className="flex items-center gap-2 group">
-          <div className="h-10 w-10 rounded-xl bg-gradient-to-br from-primary via-accent to-accent-secondary flex items-center justify-center group-hover:scale-110 transition-transform">
-            <Brain className="h-6 w-6 text-white" />
-          </div>
-          <span className="text-xl font-bold bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
-            Maternal Mind
-          </span>
+        <Link to="/" className="group">
+          <Logo className="transition-transform group-hover:scale-105" />
         </Link>
         
         {/* Desktop Navigation */}

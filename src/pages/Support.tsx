@@ -47,11 +47,11 @@ const Support = () => {
   };
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background flex flex-col">
       <Navigation />
       
-      <main className="pt-24 pb-6 px-4 h-screen flex flex-col">
-        <div className="container mx-auto max-w-4xl flex-1 flex flex-col">
+      <main className="pt-24 pb-12 px-4 flex-1">
+        <div className="container mx-auto max-w-4xl h-full flex flex-col">
           {/* Header */}
           <div className="mb-6 animate-fade-in text-center">
             <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-2">
@@ -63,7 +63,7 @@ const Support = () => {
           </div>
 
           {/* Chat Container */}
-          <Card className="flex-1 flex flex-col border-border shadow-lg overflow-hidden">
+          <Card className="flex flex-col border-border shadow-lg overflow-hidden h-[600px]">
             {/* Messages */}
             <ScrollArea className="flex-1 p-6">
               <div className="space-y-6">
