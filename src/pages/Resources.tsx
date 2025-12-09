@@ -5,13 +5,14 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Search, BookOpen, Video, HeadphonesIcon, FileText, ExternalLink, Clock } from "lucide-react";
+import { useState, useMemo } from "react";
 
 const categories = [
-  { name: "All Resources", count: 48 },
-  { name: "Articles", count: 22 },
-  { name: "Videos", count: 12 },
-  { name: "Podcasts", count: 8 },
-  { name: "Guides", count: 6 },
+  { name: "All Resources", type: "all", count: 48 },
+  { name: "Articles", type: "article", count: 22 },
+  { name: "Videos", type: "video", count: 12 },
+  { name: "Podcasts", type: "podcast", count: 8 },
+  { name: "Guides", type: "guide", count: 6 },
 ];
 
 const resources = [
@@ -84,6 +85,26 @@ const resources = [
 ];
 
 const Resources = () => {
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("all");
+
+  // Filter resources based on search query and selected category
+  const filteredResources = useMemo(() => {
+    return resources.filter((resource) => {
+      // Filter by category
+      const matchesCategory = selectedCategory === "all" || resource.type === selectedCategory;
+      
+      // Filter by search query
+      const matchesSearch = searchQuery === "" || 
+        resource.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        resource.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        resource.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase())) ||
+        resource.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        resource.author.toLowerCase().includes(searchQuery.toLowerCase());
+      
+      return matchesCategory && matchesSearch;
+    });
+  }, [searchQuery, selectedCategory]);
   return (
     <div className="min-h-screen bg-background">
       <Navigation />
@@ -107,6 +128,8 @@ const Resources = () => {
               <Input 
                 placeholder="Search articles, videos, guides..." 
                 className="pl-12 h-12 text-base border-border bg-card shadow-sm"
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
               />
             </div>
           </div>
@@ -117,8 +140,9 @@ const Resources = () => {
               {categories.map((category, index) => (
                 <Button
                   key={index}
-                  variant={index === 0 ? "default" : "outline"}
-                  className={index === 0 ? "bg-primary hover:bg-primary-dark" : "hover:bg-secondary/50"}
+                  variant={selectedCategory === category.type ? "default" : "outline"}
+                  className={selectedCategory === category.type ? "bg-primary hover:bg-primary-dark" : "hover:bg-secondary/50"}
+                  onClick={() => setSelectedCategory(category.type)}
                 >
                   {category.name}
                   <Badge variant="secondary" className="ml-2 bg-background/20">
@@ -129,71 +153,106 @@ const Resources = () => {
             </div>
           </div>
 
+          {/* Results Count */}
+          {(searchQuery || selectedCategory !== "all") && (
+            <div className="mb-6 text-sm text-muted-foreground">
+              Found {filteredResources.length} {filteredResources.length === 1 ? 'resource' : 'resources'}
+              {searchQuery && ` matching "${searchQuery}"`}
+            </div>
+          )}
+
           {/* Resources Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {resources.map((resource, index) => (
-              <Card
-                key={index}
-                className="group hover:shadow-lg transition-all duration-300 overflow-hidden border-border animate-scale-in cursor-pointer"
-                style={{ animationDelay: `${index * 0.05}s` }}
+          {filteredResources.length > 0 ? (
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {filteredResources.map((resource, index) => (
+                <Card
+                  key={index}
+                  className="group hover:shadow-lg transition-all duration-300 overflow-hidden border-border animate-scale-in cursor-pointer flex flex-col"
+                  style={{ animationDelay: `${index * 0.05}s` }}
+                >
+                  {/* Gradient Header */}
+                  <div className={`h-2 bg-gradient-to-r ${resource.gradient}`} />
+                  
+                  <div className="p-6 flex flex-col flex-1 justify-between">
+                    <div>
+                      {/* Icon & Category */}
+                      <div className="flex items-start justify-between mb-4">
+                        <div className={`h-12 w-12 rounded-xl bg-gradient-to-br ${resource.gradient} flex items-center justify-center flex-shrink-0`}>
+                          <resource.icon className="h-6 w-6 text-white" />
+                        </div>
+                        <Badge variant="secondary" className="bg-secondary/50 text-secondary-foreground text-xs px-3">
+                          {resource.category}
+                        </Badge>
+                      </div>
+
+                      {/* Content */}
+                      <h3 className="text-xl font-semibold text-foreground mb-3 group-hover:text-primary transition-colors line-clamp-2">
+                        {resource.title}
+                      </h3>
+                      <p className="text-sm text-muted-foreground mb-4 line-clamp-3 leading-relaxed">
+                        {resource.description}
+                      </p>
+                    </div>
+
+                    {/* Tags - Separate Section */}
+                    <div>
+                      <div className="flex flex-wrap gap-2 mb-4 pb-4 border-b border-border">
+                        {resource.tags.map((tag, tagIndex) => (
+                          <Badge
+                            key={tagIndex}
+                            variant="secondary"
+                            className="text-xs font-medium bg-background border border-border px-3 py-1"
+                          >
+                            {tag}
+                          </Badge>
+                        ))}
+                      </div>
+
+                      {/* Footer */}
+                      <div className="flex items-center justify-between">
+                        <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                          <Clock className="h-4 w-4" />
+                          {resource.readTime}
+                        </div>
+                        <Button variant="ghost" size="sm" className="gap-2 group-hover:text-primary">
+                          View
+                          <ExternalLink className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </Card>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-16">
+              <div className="h-16 w-16 rounded-full bg-muted flex items-center justify-center mx-auto mb-4">
+                <Search className="h-8 w-8 text-muted-foreground" />
+              </div>
+              <h3 className="text-xl font-semibold text-foreground mb-2">No resources found</h3>
+              <p className="text-muted-foreground mb-6">
+                Try adjusting your search or filter criteria
+              </p>
+              <Button 
+                variant="outline" 
+                onClick={() => {
+                  setSearchQuery("");
+                  setSelectedCategory("all");
+                }}
               >
-                {/* Gradient Header */}
-                <div className={`h-2 bg-gradient-to-r ${resource.gradient}`} />
-                
-                <div className="p-6">
-                  {/* Icon & Category */}
-                  <div className="flex items-start justify-between mb-4">
-                    <div className={`h-12 w-12 rounded-xl bg-gradient-to-br ${resource.gradient} flex items-center justify-center flex-shrink-0`}>
-                      <resource.icon className="h-6 w-6 text-white" />
-                    </div>
-                    <Badge variant="secondary" className="bg-secondary text-secondary-foreground">
-                      {resource.category}
-                    </Badge>
-                  </div>
-
-                  {/* Content */}
-                  <h3 className="text-xl font-semibold text-foreground mb-3 group-hover:text-primary transition-colors line-clamp-2">
-                    {resource.title}
-                  </h3>
-                  <p className="text-sm text-muted-foreground mb-4 line-clamp-3 leading-relaxed">
-                    {resource.description}
-                  </p>
-
-                  {/* Tags */}
-                  <div className="flex flex-wrap gap-2 mb-4">
-                    {resource.tags.map((tag, tagIndex) => (
-                      <Badge
-                        key={tagIndex}
-                        variant="outline"
-                        className="text-xs border-border hover:bg-secondary/50"
-                      >
-                        {tag}
-                      </Badge>
-                    ))}
-                  </div>
-
-                  {/* Footer */}
-                  <div className="flex items-center justify-between pt-4 border-t border-border">
-                    <div className="flex items-center gap-2 text-sm text-muted-foreground">
-                      <Clock className="h-4 w-4" />
-                      {resource.readTime}
-                    </div>
-                    <Button variant="ghost" size="sm" className="gap-2 group-hover:text-primary">
-                      View
-                      <ExternalLink className="h-4 w-4" />
-                    </Button>
-                  </div>
-                </div>
-              </Card>
-            ))}
-          </div>
+                Clear Filters
+              </Button>
+            </div>
+          )}
 
           {/* Load More */}
-          <div className="mt-12 text-center">
-            <Button variant="outline" size="lg" className="px-8">
-              Load More Resources
-            </Button>
-          </div>
+          {filteredResources.length > 0 && (
+            <div className="mt-12 text-center">
+              <Button variant="outline" size="lg" className="px-8">
+                Load More Resources
+              </Button>
+            </div>
+          )}
         </div>
       </main>
       <Footer />

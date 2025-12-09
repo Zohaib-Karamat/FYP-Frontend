@@ -1,36 +1,73 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Mic, Square, Play, Pause, Trash2, Send, Volume2, CheckCircle2 } from "lucide-react";
+import { Mic, Square, Play, Pause, Trash2, Send, Volume2, CheckCircle2, AlertCircle, Info } from "lucide-react";
 import { Progress } from "@/components/ui/progress";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 const VoiceAssessment = () => {
+  const navigate = useNavigate();
   const [isRecording, setIsRecording] = useState(false);
   const [isPaused, setIsPaused] = useState(false);
   const [recordingTime, setRecordingTime] = useState(0);
   const [transcribedText, setTranscribedText] = useState("");
   const [isProcessing, setIsProcessing] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showResults, setShowResults] = useState(false);
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
 
   // Mock transcribed text for UI demonstration
   const sampleTranscription = "I've been feeling quite anxious lately, especially in the mornings. My sleep has been disrupted, and I find myself worrying about the pregnancy more than usual. Sometimes I feel overwhelmed with all the changes happening.";
 
+  // Cleanup timer on unmount
+  useEffect(() => {
+    return () => {
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+      }
+    };
+  }, []);
+
+  // Handle timer when recording state changes
+  useEffect(() => {
+    if (isRecording && !isPaused) {
+      timerRef.current = setInterval(() => {
+        setRecordingTime((prev) => prev + 1);
+      }, 1000);
+    } else {
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+        timerRef.current = null;
+      }
+    }
+
+    return () => {
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+      }
+    };
+  }, [isRecording, isPaused]);
+
   const handleStartRecording = () => {
     setIsRecording(true);
     setIsPaused(false);
-    // Simulate recording timer
-    const timer = setInterval(() => {
-      setRecordingTime((prev) => prev + 1);
-    }, 1000);
   };
 
   const handleStopRecording = () => {
     setIsRecording(false);
     setIsPaused(false);
     setIsProcessing(true);
+    
+    // Clear the timer
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+      timerRef.current = null;
+    }
     
     // Simulate AI processing
     setTimeout(() => {
@@ -48,6 +85,23 @@ const VoiceAssessment = () => {
     setTranscribedText("");
     setIsRecording(false);
     setIsPaused(false);
+    setShowResults(false);
+    
+    // Clear the timer
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+      timerRef.current = null;
+    }
+  };
+
+  const handleSubmit = () => {
+    setIsSubmitting(true);
+    
+    // Simulate submission and analysis
+    setTimeout(() => {
+      setIsSubmitting(false);
+      setShowResults(true);
+    }, 2000);
   };
 
   const formatTime = (seconds: number) => {
@@ -55,6 +109,169 @@ const VoiceAssessment = () => {
     const secs = seconds % 60;
     return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
   };
+
+  // Results page after submission
+  if (showResults) {
+    const analysisScore = 12; // Mock score
+    const riskLevel: "low" | "moderate" | "high" = "moderate";
+    
+    return (
+      <div className="min-h-screen bg-background">
+        <Navigation />
+        
+        <main className="pt-24 pb-12 px-4">
+          <div className="container mx-auto max-w-3xl">
+            <Card className="p-8 border-border shadow-lg">
+              <div className="text-center mb-8">
+                <div className="h-20 w-20 rounded-full bg-success/10 flex items-center justify-center mx-auto mb-4">
+                  <CheckCircle2 className="h-10 w-10 text-success" />
+                </div>
+                <h1 className="text-3xl font-bold text-foreground mb-2">Analysis Complete</h1>
+                <p className="text-muted-foreground">Voice Assessment Results</p>
+              </div>
+
+              <div className="space-y-6">
+                <Card className="p-6 bg-secondary/30">
+                  <div className="text-center">
+                    <p className="text-sm text-muted-foreground mb-2">Assessment Score</p>
+                    <p className="text-5xl font-bold text-foreground mb-4">{analysisScore}</p>
+                    <Badge className={`${
+                      riskLevel === "low" ? "bg-success/10 text-success border-success" :
+                      riskLevel === "moderate" ? "bg-warning/10 text-warning border-warning" :
+                      "bg-destructive/10 text-destructive border-destructive"
+                    }`}>
+                      {riskLevel === "low" ? "Low Risk" : 
+                       riskLevel === "moderate" ? "Moderate Concern" : 
+                       "High Risk"}
+                    </Badge>
+                  </div>
+                </Card>
+
+                <Alert>
+                  <Info className="h-4 w-4" />
+                  <AlertDescription>
+                    Your voice assessment indicates moderate levels of anxiety and stress. This is common during pregnancy, 
+                    but we recommend discussing these feelings with your healthcare provider.
+                  </AlertDescription>
+                </Alert>
+
+                <div className="bg-muted/30 p-6 rounded-lg">
+                  <h3 className="font-semibold text-foreground mb-3">Key Observations</h3>
+                  <ul className="space-y-2 text-sm text-muted-foreground">
+                    <li className="flex items-start gap-2">
+                      <span className="text-primary mt-1">•</span>
+                      <span>Voice analysis detected elevated stress markers in your speech patterns</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-primary mt-1">•</span>
+                      <span>You mentioned feelings of anxiety and sleep disruption</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-primary mt-1">•</span>
+                      <span>Concerns about pregnancy changes are normal but worth addressing</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-primary mt-1">•</span>
+                      <span>Your openness in sharing is a positive step toward wellness</span>
+                    </li>
+                  </ul>
+                </div>
+
+                <div className="bg-muted/30 p-6 rounded-lg">
+                  <h3 className="font-semibold text-foreground mb-3">Recommended Next Steps</h3>
+                  <ul className="space-y-2 text-sm text-muted-foreground">
+                    <li className="flex items-start gap-2">
+                      <span className="text-primary mt-1">•</span>
+                      <span>Share these results with your healthcare provider</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-primary mt-1">•</span>
+                      <span>Consider scheduling a counseling session</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-primary mt-1">•</span>
+                      <span>Explore our mindfulness and relaxation resources</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-primary mt-1">•</span>
+                      <span>Continue regular mood tracking to monitor changes</span>
+                    </li>
+                    <li className="flex items-start gap-2">
+                      <span className="text-primary mt-1">•</span>
+                      <span>Reach out to our support network if you need to talk</span>
+                    </li>
+                  </ul>
+                </div>
+
+                {riskLevel === "moderate" && (
+                  <Alert variant="default" className="border-warning">
+                    <AlertCircle className="h-4 w-4 text-warning" />
+                    <AlertDescription>
+                      While your results show moderate concerns, early intervention can make a significant difference. 
+                      We encourage you to reach out to a mental health professional for support.
+                    </AlertDescription>
+                  </Alert>
+                )}
+
+                <div className="flex gap-4 pt-4">
+                  <Button
+                    variant="outline"
+                    className="flex-1"
+                    onClick={() => navigate("/resources")}
+                  >
+                    View Resources
+                  </Button>
+                  <Button
+                    variant="outline"
+                    className="flex-1"
+                    onClick={() => navigate("/support")}
+                  >
+                    Get Support
+                  </Button>
+                  <Button
+                    className="flex-1 bg-primary hover:bg-primary-dark"
+                    onClick={() => navigate("/dashboard")}
+                  >
+                    View Dashboard
+                  </Button>
+                </div>
+              </div>
+            </Card>
+          </div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
+
+  // Submission processing page
+  if (isSubmitting) {
+    return (
+      <div className="min-h-screen bg-background">
+        <Navigation />
+        
+        <main className="pt-24 pb-12 px-4">
+          <div className="container mx-auto max-w-3xl">
+            <Card className="p-12 border-border shadow-lg text-center">
+              <div className="h-20 w-20 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-6">
+                <div className="h-12 w-12 rounded-full border-4 border-primary border-t-transparent animate-spin" />
+              </div>
+              <h2 className="text-2xl font-bold text-foreground mb-3">Analyzing Your Voice Assessment</h2>
+              <p className="text-muted-foreground mb-8">
+                Our AI is processing your transcription and analyzing the emotional content...
+              </p>
+              <Progress value={75} className="h-2 mb-4" />
+              <p className="text-xs text-muted-foreground">
+                This may take a few moments. Please don't close this window.
+              </p>
+            </Card>
+          </div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
+
 
   return (
     <div className="min-h-screen bg-background">
@@ -249,7 +466,7 @@ const VoiceAssessment = () => {
                 </Button>
                 <Button
                   className="flex-1 gap-2 bg-primary hover:bg-primary-dark"
-                  onClick={() => {}}
+                  onClick={handleSubmit}
                 >
                   <Send className="h-4 w-4" />
                   Submit for Analysis
